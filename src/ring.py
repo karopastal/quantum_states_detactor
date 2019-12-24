@@ -2,12 +2,13 @@ import numpy as np
 
 
 class Ring:
-    def __init__(self, n=3, site_zero=0, tau_interval=25, hopping_amp=1):
+    def __init__(self, n=3, site_zero=0, detector=0, tau_interval=25, hopping_amp=1):
         if n < 3:
             raise Exception('Oops, valid Ring has no less than three sites, try again..')
 
         self.n = n
         self.site_zero = site_zero
+        self.detector = detector
         self.tau_interval = tau_interval
         self.hopping_amp = hopping_amp
         self.hamiltonian = self.__init_hamiltonian()
@@ -47,17 +48,15 @@ class Ring:
         psi_tau = self.__init_psi_zero()
         psi_tau_states_basis = np.linalg.solve(self.states, psi_tau)
 
-        start_interval = 0
         time = np.linspace(0, taus[-1], self.tau_interval*len(taus))
         psi_time_series = []
         probabilities_time_series = []
 
         for tau in taus:
-            period = np.linspace(start_interval, tau, self.tau_interval)
 
-            for t in period:
-                # evaluate function at time t
-                psi_tau_states_basis_tic = np.diag(np.exp(t*self.energies*1.j)).dot(psi_tau_states_basis)
+            for idx in range(self.tau_interval):
+                tic = time[idx + tau*self.tau_interval]
+                psi_tau_states_basis_tic = np.diag(np.exp(tic*self.energies*1.j)).dot(psi_tau_states_basis)
 
                 psi_tau_tic = self.states.dot(psi_tau_states_basis_tic)
                 psi_tau_tic = psi_tau_tic / np.linalg.norm(psi_tau_tic)
@@ -65,7 +64,9 @@ class Ring:
                 probabilities_time_series.append(np.square(np.abs(psi_tau_tic)))
 
             # once we measured at self.site the wave function collapses
-            psi_time_series[-1][self.site_zero] = 0
+            # detector = int(int(self.site_zero + self.n)/2)
+
+            psi_time_series[-1][self.detector] = 0
             psi_collapse = psi_time_series[-1]
             psi_tau_tic = psi_collapse / np.linalg.norm(psi_collapse)
 
@@ -73,7 +74,6 @@ class Ring:
             probabilities_time_series[-1] = np.square(np.abs(psi_tau_tic))
 
             psi_tau_states_basis = np.linalg.solve(self.states, psi_time_series[-1])
-            start_interval = tau
 
         return time, psi_time_series, probabilities_time_series
 

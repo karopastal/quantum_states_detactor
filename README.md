@@ -31,9 +31,5 @@ Run the detector with:
 ``` 
 
 ```shell script
-   $ make site 
-``` 
-
-```shell script
    $ make ring 
 ``` 

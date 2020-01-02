@@ -48,6 +48,7 @@ class Detector:
     def plot_probabilities_t(self):
         fig, ax = plt.subplots(figsize=(12, 12))
         ax.imshow(self.probabilities_t, interpolation='nearest', aspect='auto')
+        ax.set_ylim(0, self.probabilities_t.shape[0])
 
         plt.title('%s sites, %s detections, detector at site: #%s, hopping: %s' %
                   (self.n, len(self.taus), self.detector, self.hopping_amp))

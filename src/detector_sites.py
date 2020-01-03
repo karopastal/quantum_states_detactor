@@ -4,26 +4,41 @@ import matplotlib.pyplot as plt
 from src.ring import Ring
 
 N = 200
-TAUS = 50
-SITE_ZERO = 100  # np.random.randint(1, n+1)
-DETECTOR = SITE_ZERO + 3
-TAU_INTERVAL = 50
 HOPPING_AMPLITUDE = 0.15
+TAUS = 50
+TAU_INTERVAL = 50
+ENABLE_DETECTOR = True
+SITE_ZERO = 100
+DETECTOR = SITE_ZERO
+DETECTOR_FREQUENCY = 1
 
 
-class Detector:
-    def __init__(self, n=3, taus=6, site_zero=0, detector=0, tau_interval=25, hopping_amp=1):
+class DetectorSites:
+    def __init__(self,
+                 n=3,
+                 taus=6,
+                 site_zero=0,
+                 detector=0,
+                 detector_frequency=1,
+                 tau_interval=25,
+                 hopping_amp=1,
+                 enable_detector=False):
+
         self.n = n
         self.taus = np.arange(0, taus)  # [0,1,2,3,4,5]
         self.site_zero = site_zero
+        self.detector_frequency = detector_frequency
         self.detector = detector  # int(int(self.site_zero + self.n)/2)
         self.hopping_amp = hopping_amp
+        self.enable_detector = enable_detector
 
         self.ring = Ring(n=N,
                          site_zero=site_zero,
                          detector=self.detector,
+                         detector_frequency=self.detector_frequency,
                          tau_interval=tau_interval,
-                         hopping_amp=hopping_amp)
+                         hopping_amp=hopping_amp,
+                         enable_detector=self.enable_detector)
 
         self.time, psi, probabilities = self.ring.compute_psi_tau(taus=self.taus)
         self.psi_t = np.stack(psi, axis=0)
@@ -59,14 +74,15 @@ class Detector:
 
 
 def main():
-    detector = Detector(n=N,
-                        taus=TAUS,
-                        site_zero=SITE_ZERO,
-                        detector=DETECTOR,
-                        tau_interval=TAU_INTERVAL,
-                        hopping_amp=HOPPING_AMPLITUDE)
+    detector = DetectorSites(n=N,
+                             taus=TAUS,
+                             site_zero=SITE_ZERO,
+                             detector=DETECTOR,
+                             detector_frequency=DETECTOR_FREQUENCY,
+                             tau_interval=TAU_INTERVAL,
+                             hopping_amp=HOPPING_AMPLITUDE,
+                             enable_detector=ENABLE_DETECTOR)
 
-    detector.plot_detector()
     detector.plot_probabilities_t()
 
 

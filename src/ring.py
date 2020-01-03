@@ -2,17 +2,27 @@ import numpy as np
 
 
 class Ring:
-    def __init__(self, n=3, site_zero=0, detector=0, tau_interval=25, hopping_amp=1):
+    def __init__(self,
+                 n=3,
+                 site_zero=0,
+                 detector=0,
+                 detector_frequency=1,
+                 tau_interval=25,
+                 hopping_amp=1,
+                 enable_detector=False):
+
         if n < 3:
             raise Exception('Oops, valid Ring has no less than three sites, try again..')
 
         self.n = n
         self.site_zero = site_zero
         self.detector = detector
+        self.detector_frequency = detector_frequency
         self.tau_interval = tau_interval
         self.hopping_amp = hopping_amp
         self.hamiltonian = self.__init_hamiltonian()
         self.energies, self.states = self.__get_states_and_energies()
+        self.enable_detector = enable_detector
 
     def __init_hamiltonian(self):
         hamiltonian = np.zeros((self.n, self.n))
@@ -36,15 +46,13 @@ class Ring:
 
         return psi_zero
 
+    def __init_momentum_zero(self, momentum_state):
+        psi_zero = np.zeros(self.n)
+        psi_zero[momentum_state] = 1
+
+        return psi_zero
+
     def compute_psi_tau(self, taus):
-        """
-             psi_tau_* : wave-function at sites bases
-             psi_tau_states_basis_* : wave-function at hamiltonian eigensates bases
-
-             time_series :
-             probabilities_series :
-         """
-
         psi_tau = self.__init_psi_zero()
         psi_tau_states_basis = np.linalg.solve(self.states, psi_tau)
 
@@ -63,17 +71,46 @@ class Ring:
                 psi_time_series.append(psi_tau_tic)
                 probabilities_time_series.append(np.square(np.abs(psi_tau_tic)))
 
-            # once we measured at self.site the wave function collapses
-            # detector = int(int(self.site_zero + self.n)/2)
+            if self.enable_detector and ((tau + 1) % self.detector_frequency) == 0:
+                psi_time_series[-1][self.detector] = 0
+                psi_collapse = psi_time_series[-1]
+                psi_tau_tic = psi_collapse / np.linalg.norm(psi_collapse)
 
-            psi_time_series[-1][self.detector] = 0
-            psi_collapse = psi_time_series[-1]
-            psi_tau_tic = psi_collapse / np.linalg.norm(psi_collapse)
-
-            psi_time_series[-1] = psi_tau_tic
-            probabilities_time_series[-1] = np.square(np.abs(psi_tau_tic))
+                psi_time_series[-1] = psi_tau_tic
+                probabilities_time_series[-1] = np.square(np.abs(psi_tau_tic))
 
             psi_tau_states_basis = np.linalg.solve(self.states, psi_time_series[-1])
+
+        return time, psi_time_series, probabilities_time_series
+
+    def compute_momentum_tau(self, taus, momentum_state):
+        psi_momentum_tau = self.__init_momentum_zero(momentum_state)
+
+        time = np.linspace(0, taus[-1], self.tau_interval*len(taus))
+        psi_time_series = []
+        probabilities_time_series = []
+
+        for tau in taus:
+
+            for idx in range(self.tau_interval):
+                tic = time[idx + tau*self.tau_interval]
+
+                psi_momentum_tau_tic = np.diag(np.exp(tic*self.energies*1.j)).dot(psi_momentum_tau)
+
+                psi_tau_tic = self.states.dot(psi_momentum_tau_tic)
+                psi_tau_tic = psi_tau_tic / np.linalg.norm(psi_tau_tic)
+                psi_time_series.append(psi_tau_tic)
+                probabilities_time_series.append(np.square(np.abs(psi_tau_tic)))
+
+            if self.enable_detector and ((tau + 1) % self.detector_frequency) == 0:
+                psi_time_series[-1][self.detector] = 0
+                psi_collapse = psi_time_series[-1]
+                psi_tau_tic = psi_collapse / np.linalg.norm(psi_collapse)
+
+                psi_time_series[-1] = psi_tau_tic
+                probabilities_time_series[-1] = np.square(np.abs(psi_tau_tic))
+
+            psi_momentum_tau = np.linalg.solve(self.states, psi_time_series[-1])
 
         return time, psi_time_series, probabilities_time_series
 
@@ -83,16 +120,6 @@ def main():
 
     print(ring.hamiltonian)
     print(ring.energies)
-
-    # print(ring.hamiltonian.dot(ring.states[1][1]))
-    # print(np.dot(ring.hamiltonian[:, :], ring.states[:, 2]))
-    # print(np.dot(ring.hamiltonian[:, :], ring.states[:, 2])/ring.energies[2])
-
-    # convert to new basis
-    # a = np.linalg.solve(ring.states, np.array([1, 0, 0]))
-
-    # convert back
-    # print(ring.states.dot(a))
 
 
 if __name__ == '__main__':

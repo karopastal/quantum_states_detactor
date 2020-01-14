@@ -3,15 +3,15 @@ import matplotlib
 import matplotlib.pyplot as plt
 from src.ring import Ring
 
-N = 200
-HOPPING_AMPLITUDE = 0.15
-TAUS = 50
-TAU_INTERVAL = 100
+N = 100
+HOPPING_AMPLITUDE = 0.01
+TAUS = 100
+TAU_INTERVAL = 1
 ENABLE_DETECTOR = True
-SITE_ZERO = 100
+SITE_ZERO = 50
 DETECTOR = SITE_ZERO
-DETECTOR_FREQUENCY = 10
-MOMENTUM_STATE = 10
+DETECTOR_FREQUENCY = 1
+MOMENTUM_STATE = 0
 
 
 class DetectorMomentum:

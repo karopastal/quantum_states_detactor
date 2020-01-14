@@ -1,16 +1,15 @@
 import numpy as np
-import matplotlib
 import matplotlib.pyplot as plt
 from src.ring import Ring
 
-N = 200
-HOPPING_AMPLITUDE = 0.15
-TAUS = 50
-TAU_INTERVAL = 50
+N = 100
+HOPPING_AMPLITUDE = 0.5
+TAUS = 100
+TAU_INTERVAL = 100
 ENABLE_DETECTOR = True
-SITE_ZERO = 100
+SITE_ZERO = 50
 DETECTOR = SITE_ZERO
-DETECTOR_FREQUENCY = 1
+DETECTOR_FREQUENCY = 50
 
 
 class DetectorSites:
@@ -25,14 +24,14 @@ class DetectorSites:
                  enable_detector=False):
 
         self.n = n
-        self.taus = np.arange(0, taus)  # [0,1,2,3,4,5]
+        self.taus = np.arange(0, taus)
         self.site_zero = site_zero
         self.detector_frequency = detector_frequency
-        self.detector = detector  # int(int(self.site_zero + self.n)/2)
+        self.detector = detector
         self.hopping_amp = hopping_amp
         self.enable_detector = enable_detector
 
-        self.ring = Ring(n=N,
+        self.ring = Ring(n=self.n,
                          site_zero=site_zero,
                          detector=self.detector,
                          detector_frequency=self.detector_frequency,
@@ -46,8 +45,8 @@ class DetectorSites:
 
     def plot_detector(self):
         detector = self.detector
-        probabilities_site_zero_t = self.probabilities_t[:, detector:detector + 1].reshape(
-            self.probabilities_t[:, detector:detector + 1].shape[0], )
+
+        probabilities_site_zero_t = self.probabilities_t
 
         fig, ax = plt.subplots()
         ax.plot(self.time, probabilities_site_zero_t)
@@ -84,6 +83,7 @@ def main():
                              enable_detector=ENABLE_DETECTOR)
 
     detector.plot_probabilities_t()
+    detector.plot_detector()
 
 
 if __name__ == '__main__':

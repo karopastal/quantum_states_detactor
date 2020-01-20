@@ -2,19 +2,22 @@ import numpy as np
 import matplotlib.pyplot as plt
 from src.ring import Ring
 
-N = 100
+
+N = 200
+A = 1
 HOPPING_AMPLITUDE = 0.5
-TAUS = 100
-TAU_INTERVAL = 100
+TAUS = 50
+TAU_INTERVAL = 5
+SITE_ZERO = 100
+DETECTOR = 104
+DETECTOR_FREQUENCY = 25
 ENABLE_DETECTOR = True
-SITE_ZERO = 50
-DETECTOR = SITE_ZERO
-DETECTOR_FREQUENCY = 50
 
 
 class DetectorSites:
     def __init__(self,
                  n=3,
+                 a=1,
                  taus=6,
                  site_zero=0,
                  detector=0,
@@ -24,6 +27,7 @@ class DetectorSites:
                  enable_detector=False):
 
         self.n = n
+        self.a = a
         self.taus = np.arange(0, taus)
         self.site_zero = site_zero
         self.detector_frequency = detector_frequency
@@ -32,6 +36,7 @@ class DetectorSites:
         self.enable_detector = enable_detector
 
         self.ring = Ring(n=self.n,
+                         a=self.a,
                          site_zero=site_zero,
                          detector=self.detector,
                          detector_frequency=self.detector_frequency,
@@ -44,32 +49,73 @@ class DetectorSites:
         self.probabilities_t = np.stack(probabilities, axis=0)
 
     def plot_detector(self):
-        detector = self.detector
-
-        probabilities_site_zero_t = self.probabilities_t
-
         fig, ax = plt.subplots()
-        ax.plot(self.time, probabilities_site_zero_t)
 
-        ax.set(xlabel='Time (a.u)',
-               ylabel='Probability(Time)',
-               title='%s sites, %s detections, detector at site: #%s, hopping: %s' %
-                     (self.n, len(self.taus), self.detector, self.hopping_amp))
+        for i in range(len(self.probabilities_t.T)):
+            ax.plot(self.time, self.probabilities_t.T[i], label='site ' + str(i + 1))
+
+        plt.legend(bbox_to_anchor=(1.125, 1), loc='upper right', borderaxespad=0.1, fontsize=14)
+
+        if self.enable_detector:
+            detector = '| %s >' % self.detector
+            detections = 'every %s [tau]' % self.detector_frequency
+        else:
+            detector = 'disabled'
+            detections = 'None'
+
+        plt.title('%s sites, particle(t=0): | %s >, detector: %s, detections: %s' %
+                  (self.n,  self.site_zero, detector, detections), fontsize=18)
+
+        plt.xlabel('Time [tau]', fontsize=20)
+        plt.ylabel('Probability', fontsize=20)
 
         ax.grid()
         plt.show()
 
     def plot_probabilities_t(self):
-        fig, ax = plt.subplots(figsize=(12, 12))
-        ax.imshow(self.probabilities_t, interpolation='nearest', aspect='auto')
-        ax.set_ylim(0, self.probabilities_t.shape[0])
+        fig, ax = plt.subplots(figsize=(15, 9))
 
-        plt.title('%s sites, %s detections, detector at site: #%s, hopping: %s' %
-                  (self.n, len(self.taus), self.detector, self.hopping_amp))
+        img = ax.imshow(self.probabilities_t.T,
+                        extent=(0, len(self.taus), self.n, 0),
+                        interpolation='nearest',
+                        aspect='auto',
+                        cmap='pink')
 
-        plt.ylabel('Time (a.u)')
-        plt.xlabel('Position')
+        ax.set_ylim(0, self.n)
+        fig.colorbar(img, ax=ax)
+
+        if self.enable_detector:
+            detector = '| %s >' % self.detector
+            detections = 'every %s [tau]' % self.detector_frequency
+        else:
+            detector = 'disabled'
+            detections = 'None'
+
+        plt.title('%s sites, particle(t=0): | %s >, detector: %s, detections: %s' %
+                  (self.n,  self.site_zero, detector, detections), fontsize=18)
+
+        plt.xlabel('Time [tau]', fontsize=18)
+        plt.ylabel('Position', fontsize=18)
+
         plt.show()
+
+    def save_plot(self, title, path):
+        fig, ax = plt.subplots(figsize=(15, 9))
+        img = ax.imshow(self.probabilities_t.T,
+                        extent=(0, len(self.taus), self.n, 0),
+                        interpolation='nearest',
+                        aspect='auto',
+                        cmap='pink')
+
+        ax.set_ylim(0, self.n)
+
+        fig.colorbar(img, ax=ax)
+
+        plt.title(title, fontsize=20)
+        plt.xlabel('Time [tau]', fontsize=18)
+        plt.ylabel('Position', fontsize=18)
+
+        plt.savefig(path)
 
 
 def main():
@@ -83,7 +129,7 @@ def main():
                              enable_detector=ENABLE_DETECTOR)
 
     detector.plot_probabilities_t()
-    detector.plot_detector()
+    # detector.plot_detector()
 
 
 if __name__ == '__main__':

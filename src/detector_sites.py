@@ -92,10 +92,10 @@ class DetectorSites:
             detections = 'None'
 
         plt.title('%s sites, particle(t=0): | %s >, detector: %s, detections: %s' %
-                  (self.n,  self.site_zero, detector, detections), fontsize=18)
+                  (self.n,  self.site_zero, detector, detections), fontsize=20)
 
-        plt.xlabel('Time [tau]', fontsize=18)
-        plt.ylabel('Position', fontsize=18)
+        plt.xlabel('Time [tau]', fontsize=20)
+        plt.ylabel('Position', fontsize=20)
 
         plt.show()
 

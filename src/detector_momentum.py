@@ -55,7 +55,7 @@ class DetectorMomentum:
         self.psi_momentum_t = np.stack(psi_momentum, axis=0)
         self.probabilities_momentum_t = np.stack(probabilities_momentum, axis=0)
 
-    def plot_detector(self):
+    def plot_probability_per_site(self):
         fig, ax = plt.subplots()
 
         for i in range(len(self.probabilities_momentum_t.T)):
@@ -84,7 +84,7 @@ class DetectorMomentum:
         ax.grid()
         plt.show()
 
-    def plot_momentum_t(self):
+    def plot_probability_density(self):
         fig, ax = plt.subplots(figsize=(12, 12))
         ax.imshow(self.probabilities_momentum_t.T,
                   extent=(0, len(self.taus), self.n, 0),
@@ -145,8 +145,8 @@ def main():
                                 enable_detector=ENABLE_DETECTOR,
                                 enable_detector_velocity=ENABLE_DETECTOR_VELOCITY)
 
-    detector.plot_momentum_t()
-    # detector.plot_detector()
+    detector.plot_probability_density()
+    # detector.plot_probability_per_site()
 
 
 if __name__ == '__main__':

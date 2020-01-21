@@ -86,13 +86,16 @@ class DetectorMomentum:
 
     def plot_probability_density(self):
         fig, ax = plt.subplots(figsize=(12, 12))
-        ax.imshow(self.probabilities_momentum_t.T,
-                  extent=(0, len(self.taus), self.n, 0),
-                  interpolation='nearest',
-                  aspect='auto',
-                  cmap='pink')
+
+        img = ax.imshow(self.probabilities_momentum_t.T,
+                        extent=(0, len(self.taus), self.n, 0),
+                        interpolation='nearest',
+                        aspect='auto',
+                        cmap='pink')
 
         ax.set_ylim(0, self.n)
+
+        fig.colorbar(img, ax=ax)
 
         if self.enable_detector:
             detector = '| %s >' % self.detector
@@ -107,7 +110,7 @@ class DetectorMomentum:
             detections = 'None'
 
         plt.title('%s sites, momentum(t=0): | k_%s >, detector: %s, detections: %s' %
-                  (self.n,  self.momentum_state, detector, detections), fontsize=20)
+                  (self.n,  self.momentum_state, detector, detections), fontsize=16)
 
         plt.xlabel('Time [tau]', fontsize=22)
         plt.ylabel('Position', fontsize=22)

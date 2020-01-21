@@ -52,7 +52,7 @@ class DetectorSites:
         fig, ax = plt.subplots()
 
         for i in range(len(self.probabilities_t.T)):
-            ax.plot(self.time, self.probabilities_t.T[i], label='site ' + str(i + 1))
+            ax.plot(self.time, self.probabilities_t.T[i], label='site ' + str(i))
 
         plt.legend(bbox_to_anchor=(1.125, 1), loc='upper right', borderaxespad=0.1, fontsize=14)
 

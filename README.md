@@ -51,8 +51,8 @@ is the recommended terminal to run the commands.
  
  #### install
 ```shell script
-    $ git clone https://github.com/karopastal/quantum_states_detactor.git
-    $ cd quantum_states_detactor
+    $ git clone https://github.com/karopastal/quantum_states_detector.git
+    $ cd quantum_states_detector
     $ pip3 install numpy matplotlib
 ```
 
@@ -137,11 +137,11 @@ ENABLE_DETECTOR_VELOCITY = True
 ```shell script
 N = 200
 HOPPING_AMPLITUDE = 1
-TAUS = 100
-TAU_INTERVAL = 5
+TAUS = 150
+TAU_INTERVAL = 25
 ENABLE_DETECTOR = True
 DETECTOR = 100
-DETECTOR_FREQUENCY = 5
+DETECTOR_FREQUENCY = 2
 MOMENTUM_STATE = 50
 ENABLE_DETECTOR_VELOCITY = True
 ```
@@ -151,4 +151,4 @@ ENABLE_DETECTOR_VELOCITY = True
 ``` 
 
 #### detector.plot_probability_density:
-![](/docs/examples/200_momentum.png)
+![](/docs/examples/200_1_momentum.png)

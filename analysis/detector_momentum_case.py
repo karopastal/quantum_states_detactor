@@ -23,8 +23,8 @@ def main():
                                 enable_detector=ENABLE_DETECTOR,
                                 enable_detector_velocity=ENABLE_DETECTOR_VELOCITY)
 
-    detector.plot_momentum_t()
-    detector.plot_detector()
+    detector.plot_probability_density()
+    detector.plot_probability_per_site()
 
     # print("Energies: \n", detector.ring.energies)
     # print("States: \n", detector.ring.states)

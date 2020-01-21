@@ -72,7 +72,7 @@ Or
 
 <a name="examples"></a>
 ### Examples
- #### Configuration:
+ #### configuration:
  
  ```shell script
 N = 10
@@ -88,7 +88,7 @@ ENABLE_DETECTOR = False
    $ make detector_sites_case 
 ``` 
 
-#### plot_detector:
+#### detector.plot_probability_per_site:
 
 ![](/docs/examples/10_sites.png)
 
@@ -109,7 +109,7 @@ ENABLE_DETECTOR = True
    $ make detector_sites_case 
 ``` 
 
-#### plot_probabilities_t:
+#### detector.plot_probability_density:
 ![](/docs/examples/100_sites.png)
 
 #### configuration:
@@ -129,7 +129,7 @@ ENABLE_DETECTOR_VELOCITY = True
    $ make detector_momentum_case 
 ``` 
 
-#### plot_detector:
+#### detector.plot_probability_per_site:
 ![](/docs/examples/10_momentum.png)
 
 
@@ -150,5 +150,5 @@ ENABLE_DETECTOR_VELOCITY = True
    $ make detector_momentum_case 
 ``` 
 
-#### plot_probabilities_t:
+#### detector.plot_probability_density:
 ![](/docs/examples/200_momentum.png)

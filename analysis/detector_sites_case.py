@@ -22,8 +22,8 @@ def main():
                              hopping_amp=HOPPING_AMP,
                              enable_detector=ENABLE_DETECTOR)
 
-    detector.plot_detector()
-    detector.plot_probabilities_t()
+    detector.plot_probability_per_site()
+    detector.plot_probability_density()
 
     # print("Energies: \n", detector.ring.energies)
     # print("States: \n", detector.ring.states)

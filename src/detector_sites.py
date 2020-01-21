@@ -48,7 +48,7 @@ class DetectorSites:
         self.psi_t = np.stack(psi, axis=0)
         self.probabilities_t = np.stack(probabilities, axis=0)
 
-    def plot_detector(self):
+    def plot_probability_per_site(self):
         fig, ax = plt.subplots()
 
         for i in range(len(self.probabilities_t.T)):
@@ -72,7 +72,7 @@ class DetectorSites:
         ax.grid()
         plt.show()
 
-    def plot_probabilities_t(self):
+    def plot_probability_density(self):
         fig, ax = plt.subplots(figsize=(15, 9))
 
         img = ax.imshow(self.probabilities_t.T,
@@ -128,8 +128,8 @@ def main():
                              hopping_amp=HOPPING_AMPLITUDE,
                              enable_detector=ENABLE_DETECTOR)
 
-    detector.plot_probabilities_t()
-    # detector.plot_detector()
+    detector.plot_probability_density()
+    # detector.plot_probability_per_site()
 
 
 if __name__ == '__main__':

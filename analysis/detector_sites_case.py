@@ -1,14 +1,14 @@
 import numpy as np
 from src.detector_sites import DetectorSites
 
-N = 2
+N = 100
 TAUS = 50
 SITE_ZERO = 0
-DETECTOR = 0
+DETECTOR = 50
 DETECTOR_FREQUENCY = 5
 TAU_INTERVAL = 20
-HOPPING_AMP = 0.09
-ENABLE_DETECTOR = False
+HOPPING_AMP = 1
+ENABLE_DETECTOR = True
 
 
 def main():

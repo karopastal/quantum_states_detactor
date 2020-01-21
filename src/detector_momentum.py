@@ -76,10 +76,10 @@ class DetectorMomentum:
             detections = 'None'
 
         plt.title('%s sites, momentum(t=0): | k_%s >, detector: %s, detections: %s' %
-                  (self.n,  self.momentum_state, detector, detections), fontsize=18)
+                  (self.n,  self.momentum_state, detector, detections), fontsize=20)
 
-        plt.xlabel('Time [tau]', fontsize=20)
-        plt.ylabel('Probability', fontsize=20)
+        plt.xlabel('Time [tau]', fontsize=22)
+        plt.ylabel('Probability', fontsize=22)
 
         ax.grid()
         plt.show()
@@ -107,10 +107,10 @@ class DetectorMomentum:
             detections = 'None'
 
         plt.title('%s sites, momentum(t=0): | k_%s >, detector: %s, detections: %s' %
-                  (self.n,  self.momentum_state, detector, detections), fontsize=18)
+                  (self.n,  self.momentum_state, detector, detections), fontsize=20)
 
-        plt.xlabel('Time [tau]')
-        plt.ylabel('Position')
+        plt.xlabel('Time [tau]', fontsize=22)
+        plt.ylabel('Position', fontsize=22)
         plt.show()
 
     def save_plot(self, title, path):

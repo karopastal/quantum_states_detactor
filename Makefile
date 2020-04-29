@@ -4,11 +4,17 @@ ring:
 detector_sites:
 	@python3 -m src.detector_sites
 
+detector_bloch_sites:
+	@python3 -m src.detector_bloch_sites
+
 detector_momentum:
 	@python3 -m src.detector_momentum
 
 detector_sites_case:
 	@python3 -m analysis.detector_sites_case
+
+detector_bloch_sites_case:
+	@python3 -m analysis.detector_bloch_sites_case
 
 detector_momentum_case:
 	@python3 -m analysis.detector_momentum_case
